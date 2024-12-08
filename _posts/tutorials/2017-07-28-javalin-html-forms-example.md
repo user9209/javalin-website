@@ -201,3 +201,29 @@ We then save these files to an `upload` folder.
 
 When uploading files you need to add `enctype="multipart/form-data"` to your `<form>`.
 If you want to upload multiple files, add the `multiple` attribute to your `<input>`.
+
+## File download example
+Let's expand our example a bit to include file download.
+
+### Endpoint
+{% capture java %}
+app.get("/pdf-example", ctx -> {
+    ctx.header("Content-Disposition", "attachment; filename=\"example.pdf\"");
+    ctx.header("Content-Transfer-Encoding", "binary");
+    ctx.contentType(ContentType.APPLICATION_PDF);
+    byte[] fileContent = getFileContent();
+    ctx.header("header('Content-Length", "" + fileContent.length);
+    ctx.outputStream().write(fileContent);
+});
+{% endcapture %}
+{% capture kotlin %}
+app.post("/pdf-example") { ctx ->
+    ctx.header("Content-Disposition", "attachment; filename=\"example.pdf\"")
+    ctx.header("Content-Transfer-Encoding", "binary")
+    ctx.contentType(ContentType.APPLICATION_PDF)
+    val fileContent = getFileContent()
+    ctx.header("header('Content-Length", "" + fileContent.length)
+    ctx.outputStream().write(fileContent)
+}
+{% endcapture %}
+{% include macros/docsSnippet.html java=java kotlin=kotlin %}
